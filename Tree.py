@@ -1,10 +1,10 @@
 import uuid
 
 
-def t_new(name, info):
+def t_new(name: str, info: any):
     return (uuid.uuid4(), name, info, [])
 
-def t_add(children, to_node):
+def t_add(children: list, to_node):
     (uid, name, info, chldn) = to_node
     return (uid, name, info, children + chldn)
 
@@ -24,19 +24,18 @@ def get_children(node):
     (uid, name, info, children) = node
     return children
 
-
-def touch(node, tree):
-    id = get_uid(get_children(node)[0])
-    child = get_children(node)[0]
+# Recc moving the corresponding nodes at the beginning
+def touch(ids: list, nodes: list):
+    if not ids:
+        return []
+        
+    id = ids.pop(0)
     
-    (uid, name, info, children) = tree
+    for i, node in enumerate(nodes):
+        (uid, name, info, children) = node
+        
+        if id == uid:
+            nodes.insert(0, nodes.pop(i))
+            touch(ids, children)
     
-    for c, i in children:
-        if id == get_uid(c):
-            children.pop(i)
-            return (uid, name, info, touch(child, c) + children)
-
-    return [c]
-
-
 

@@ -1,6 +1,4 @@
-from Tkinter import *
-import ttk
-
+from tkinter import *
 from G_Tree import *
 
 
@@ -9,15 +7,15 @@ canvas = Canvas()
 w_root = ()
 
 
-def w_new(name, context):
+def w_new(name: str, context):
     return gt_new(name, context)
 
 
-def w_add(children, to_node):
+def w_add(children: list, to_node):
     return gt_add(children, to_node)
 
 
-def canvas_init(h, w):
+def canvas_init(h: int, w: int):
     global canvas, w_root
 
     canvas = Canvas(root, height=h, width=w)
@@ -29,9 +27,9 @@ def canvas_init(h, w):
     canvas.bind('<Button-1>', click)
 
 
-def canvas_add(children):
+def canvas_add(children: list):
     global w_root
-    print('{}'.format(w_root))
+    #print('{}'.format(w_root))
     w_root = w_add(children, w_root)
     draw()
     
@@ -67,25 +65,17 @@ def _draw(widget):
     # redraw screen if needed
 
 
-def node_print(node):
-    (id, name, context, children) = node
-
-    print('{}'.format(id))
-
-    for c in children:
-        node_print(c)
-
 
 def click(event):
     global w_root
     x, y = event.x, event.y
 
-    result = gt_find_branch_by_coord(x, y, w_root)
-    node_print(result)
-#    print('{}'.format(result))
+    # Liste des identifiants depuis ROOT
+    ids = gt_find_branch_by_coord(x, y, [w_root])
+    #print('{}'.format(ids))
 
-    # TODO: Move the clicked branch at the beginning
-    w_root = touch(result, w_root)
+    # Move the clicked branch at the beginning
+    touch(ids, [w_root])
     print('{}'.format(w_root))
 
     # Refresh canvas
